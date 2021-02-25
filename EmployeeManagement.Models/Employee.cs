@@ -9,13 +9,14 @@ namespace EmployeeManagement.Models
     {
         public int EmployeeId { get; set; }
 
-        [Required]
+        [Required(ErrorMessage ="First name is mandatory! (custom err.)")]
         [MinLength(2)]
         public string FirstName { get; set; }
 
         [Required]
         public string LastName { get; set; }
 
+        [EmailAddress]
         public string Email { get; set; }
 
         public DateTime DateOfBrith { get; set; }

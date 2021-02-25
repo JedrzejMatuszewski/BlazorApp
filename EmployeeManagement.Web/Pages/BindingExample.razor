@@ -1,0 +1,11 @@
+﻿@page "/bindingexample"
+@inherits BindingExampleBase
+
+<h3>BindingExample</h3>
+
+<textarea type="text" @bind="TextBox" @bind:event="oninput"  style="height:100px; width: 300px;"/>
+<p>@TextBox.Length</p>
+
+<p>Color:</p>
+<input type="text" @bind="Color" @bind:event="oninput" />
+<div @bind-style="MyStyle" @bind-style:event="onchange" ></div>

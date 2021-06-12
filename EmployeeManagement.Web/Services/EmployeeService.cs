@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Json;
 using System.Threading.Tasks;
 
 namespace EmployeeManagement.Web.Services
@@ -25,6 +26,11 @@ namespace EmployeeManagement.Web.Services
         public async Task<IEnumerable<Employee>> GetEmployees()
         {
             return await _httpClient.GetJsonAsync<Employee[]>("api/Employees");
+        }
+
+        public async Task<Employee> UpdateEmployee(Employee updatedEmployee)
+        {
+            return await _httpClient.PutJsonAsync<Employee>($"api/Employees/{updatedEmployee.EmployeeId}", updatedEmployee);
         }
     }
 }

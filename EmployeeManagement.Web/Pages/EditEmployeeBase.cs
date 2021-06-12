@@ -1,4 +1,6 @@
-﻿using EmployeeManagement.Models;
+﻿using AutoMapper;
+using EmployeeManagement.Models;
+using EmployeeManagement.Web.Models;
 using EmployeeManagement.Web.Services;
 using Microsoft.AspNetCore.Components;
 using System;
@@ -13,10 +15,18 @@ namespace EmployeeManagement.Web.Pages
         [Inject]
         public IEmployeeService EmployeeService { get; set; }
 
-        public Employee Employee { get; set; } = new Employee();
-
         [Inject]
         public IDepartmentService DepartmentService { get; set; }
+
+        [Inject]
+        public IMapper Mapper { get; set; }
+
+        [Inject]
+        public NavigationManager NavigationManager { get; set; }
+
+        private Employee Employee { get; set; } = new Employee();
+
+        public EditEmployeeModel EditEmployeeModel { get; set; } = new EditEmployeeModel();
 
         public List<Department> Departments { get; set; } = new List<Department>();
 
@@ -24,10 +34,24 @@ namespace EmployeeManagement.Web.Pages
         [Parameter]
         public string EmployeeId { get; set; }
 
+
         protected async override Task OnInitializedAsync()
         {
             Employee = await EmployeeService.GetEmployee(int.Parse(EmployeeId));
             Departments = (await DepartmentService.GetDepartments()).ToList();
+
+            Mapper.Map(Employee, EditEmployeeModel);
+        }
+
+        protected async Task HandleValidSubmit()
+        {
+            Mapper.Map(EditEmployeeModel, Employee);
+            var result = await EmployeeService.UpdateEmployee(Employee);
+
+            if (result != null)
+            {
+                NavigationManager.NavigateTo("/");
+            }
         }
     }
 }
